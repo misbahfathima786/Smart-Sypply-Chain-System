@@ -31,14 +31,19 @@ app.get("/api/shipments", (req, res) => {
 
 // POST
 app.post("/api/shipments", (req, res) => {
-    const { code, status, risk, weather, traffic, reason } = req.body;
+  const { code, status, risk, weather, traffic, reason } = req.body;
 
-    db.run(
-        "INSERT INTO shipments (code, status, risk, weather, traffic, reason) VALUES (?, ?, ?, ?, ?, ?)", [code, status, risk, weather, traffic, reason],
-        function(err) {
-            res.json({ id: this.lastID });
-        }
-    );
+  db.run(
+    "INSERT INTO shipments (code, status, risk, weather, traffic, reason) VALUES (?, ?, ?, ?, ?, ?)",
+    [code, status, risk, weather, traffic, reason],
+    function (err) {
+      if (err) {
+        console.log(err);
+        return res.status(500).send(err);
+      }
+      res.send({ id: this.lastID });
+    }
+  );
 });
 
 app.listen(5000, () => console.log("Server running on port 5000"));
