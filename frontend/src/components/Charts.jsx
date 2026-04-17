@@ -47,18 +47,44 @@ function Charts({ shipments }) {
       },
     ],
   };
-
+const options = {
+  plugins: {
+    legend: {
+      labels: {
+        color: "white",   // ✅ legend text (Risk)
+      },
+    },
+  },
+  scales: {
+    x: {
+      ticks: {
+        color: "white",   // ✅ bottom labels (city names)
+      },
+      grid: {
+        color: "rgba(255,255,255,0.2)", // optional grid light
+      },
+    },
+    y: {
+      ticks: {
+        color: "white",   // ✅ numbers on left
+      },
+      grid: {
+        color: "rgba(255,255,255,0.2)",
+      },
+    },
+  },
+};
   return (
     <div>
       <h2>📊 Analytics</h2>
 
       <div style={{ display: "flex", gap: "20px" }}>
         <div style={{ width: "300px" }}>
-          <Pie data={pieData} />
+          <Pie data={pieData} options={options} />
         </div>
 
         <div style={{ width: "400px" }}>
-          <Bar data={barData} />
+          <Bar data={barData} options={options} />
         </div>
       </div>
     </div>
