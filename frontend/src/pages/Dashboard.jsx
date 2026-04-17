@@ -11,6 +11,9 @@ function Dashboard() {
       .then(data => setShipments(data));
   }, []);
 
+  // ✅ latest shipment
+  const latest = shipments.length > 0 ? shipments[shipments.length - 1] : null;
+
   return (
     <div className="container">
       <h1>🚀 SmartChain Dashboard</h1>
@@ -19,20 +22,60 @@ function Dashboard() {
       <Charts shipments={shipments} />
 
       {/* Map */}
-      <MapView shipments={shipments} />
+      <MapView shipment={latest} />
 
-      {/* Shipment List */}
-      <h2>Shipments</h2>
-      {shipments.map((s) => (
-        <div key={s.id} className="card">
-          <h3>{s.code}</h3>
-          <p>Status: {s.status}</p>
-          <p>Risk: {s.risk}</p>
-          <p>Weather: {s.weather}</p>
-          <p>Traffic: {s.traffic}</p>
-          <p>Reason: {s.reason}</p>
+      {/* Shipment Display */}
+      <h2>Latest Shipment</h2>
+
+      {latest ? (
+        <div className="card">
+          <h3>{latest.code}</h3>
+
+          <p>
+            Weather:{" "}
+            {latest.weather === "Rain"
+              ? "🌧️ Rain"
+              : latest.weather === "Clouds"
+              ? "☁️ Clouds"
+              : latest.weather === "Thunderstorm"
+              ? "⛈️ Thunderstorm"
+              : "☀️ Clear"}
+          </p>
+
+          <p>
+            Traffic:{" "}
+            {latest.traffic === "High"
+              ? "🚗 High"
+              : latest.traffic === "Medium"
+              ? "🚕 Medium"
+              : "🟢 Low"}
+          </p>
+
+          <p>
+            Risk:{" "}
+            {latest.risk === "High"
+              ? "🔴 High"
+              : latest.risk === "Medium"
+              ? "🟠 Medium"
+              : "🟢 Low"}
+          </p>
+
+          <p>
+            Status:{" "}
+            {latest.status === "Delayed"
+              ? "⏱️ Delayed"
+              : latest.status === "Slight Delay"
+              ? "⚠️ Slight Delay"
+              : "✅ On Time"}
+          </p>
+
+          <p style={{ color: "#ffb347", fontWeight: "bold" }}>
+            {latest.reason}
+          </p>
         </div>
-      ))}
+      ) : (
+        <p>No shipments yet</p>
+      )}
     </div>
   );
 }
