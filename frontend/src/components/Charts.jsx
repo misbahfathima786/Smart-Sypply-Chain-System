@@ -19,61 +19,87 @@ ChartJS.register(
 );
 
 function Charts({ shipments }) {
-  const riskCount = { Low: 0, Medium: 0, High: 0 };
+  // ✅ Safety check
+  if (!shipments || shipments.length === 0) {
+    return <p style={{ color: "white" }}>No data yet</p>;
+  }
+
+  // ✅ Get ONLY latest shipment
+  const s = shipments[0];
+  const riskCount = { High: 0, Medium: 0, Low: 0 };
 
   shipments.forEach((s) => {
-    riskCount[s.risk]++;
+    if (s.risk === "High") riskCount.High++;
+    else if (s.risk === "Medium") riskCount.Medium++;
+    else riskCount.Low++;
   });
-
+  // ✅ Pie Data
   const pieData = {
-    labels: ["Low", "Medium", "High"],
-    datasets: [
-      {
-        data: [riskCount.Low, riskCount.Medium, riskCount.High],
-        backgroundColor: ["green", "orange", "red"],
-      },
-    ],
-  };
+  labels: ["High", "Medium", "Low"],
+  datasets: [
+    {
+      data: [
+        riskCount.High,
+        riskCount.Medium,
+        riskCount.Low,
+      ],
+      backgroundColor: [
+        "#ff4d4f", // 🔴 High
+        "#fadb14", // 🟡 Medium
+        "#52c41a", // 🟢 Low
+      ],
+    },
+  ],
+};
 
+  // ✅ Bar Data
   const barData = {
-    labels: shipments.map((s) => s.code),
+    labels: [s.code],
     datasets: [
       {
         label: "Risk",
-        data: shipments.map((s) =>
-          s.risk === "High" ? 3 : s.risk === "Medium" ? 2 : 1
-        ),
+        data: [
+          s.risk === "High"
+            ? 3
+            : s.risk === "Medium"
+            ? 2
+            : 1,
+        ],
         backgroundColor: "blue",
       },
     ],
   };
-const options = {
-  plugins: {
-    legend: {
-      labels: {
-        color: "white",   // ✅ legend text (Risk)
+
+  // ✅ Chart Options
+  const options = {
+    plugins: {
+      legend: {
+        labels: {
+          color: "white",
+        },
       },
     },
-  },
-  scales: {
-    x: {
-      ticks: {
-        color: "white",   // ✅ bottom labels (city names)
+    scales: {
+      x: {
+        ticks: {
+          color: "white",
+        },
+        grid: {
+          color: "rgba(255,255,255,0.2)",
+        },
       },
-      grid: {
-        color: "rgba(255,255,255,0.2)", // optional grid light
+      y: {
+        ticks: {
+          color: "white",
+        },
+        grid: {
+          color: "rgba(255,255,255,0.2)",
+        },
       },
     },
-    y: {
-      ticks: {
-        color: "white",   // ✅ numbers on left
-      },
-      grid: {
-        color: "rgba(255,255,255,0.2)",
-      },
-    },
-  },
-};
+  };
+
+  // ✅ Final UI
   return (
     <div>
       <h2>📊 Analytics</h2>
