@@ -7,12 +7,13 @@ function Dashboard() {
 
   useEffect(() => {
     fetch("http://localhost:5000/api/shipments")
-      .then(res => res.json())
-      .then(data => setShipments(data));
+      .then((res) => res.json())
+      .then((data) => setShipments(data));
   }, []);
 
   // ✅ latest shipment
-  const latest = shipments.length > 0 ? shipments[shipments.length - 1] : null;
+  const latest =
+    shipments.length > 0 ? shipments[shipments.length - 1] : null;
 
   return (
     <div className="container">
